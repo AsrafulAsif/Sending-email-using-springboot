@@ -1,4 +1,4 @@
-package com.example.sendingemail.exeption.error_response;
+package com.example.sendingemail.rasponse.error;
 
 
 

@@ -2,10 +2,11 @@ package com.example.sendingemail.exeption.handler;
 
 
 import com.example.sendingemail.exeption.NotFoundException;
-import com.example.sendingemail.exeption.error_response.InvalidInputErrorResponse;
-import com.example.sendingemail.exeption.error_response.SimpleErrorResponse;
+import com.example.sendingemail.rasponse.error.InvalidInputErrorResponse;
 import com.example.sendingemail.exeption.BadRequestException;
+import com.example.sendingemail.rasponse.SimpleResponseRest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,7 +22,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public InvalidInputErrorResponse handleRequestParameterException(MethodArgumentNotValidException e) {
+    public ResponseEntity<InvalidInputErrorResponse> handleRequestParameterException(MethodArgumentNotValidException e) {
         String message = "Invalid inputs";
         Integer statusCode = HttpStatus.BAD_REQUEST.value();
 
@@ -32,21 +33,21 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
 
-        return new InvalidInputErrorResponse(message, statusCode,errors);
+        return new ResponseEntity<>(new InvalidInputErrorResponse(message, statusCode,errors),HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public SimpleErrorResponse handleBadRequestException(Exception e) {
-        return new SimpleErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value());
+    public ResponseEntity<SimpleResponseRest> handleBadRequestException(Exception e) {
+        return new ResponseEntity<>(new SimpleResponseRest(e.getMessage(), HttpStatus.BAD_REQUEST.value()),HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ResponseBody
-    public SimpleErrorResponse handleNotFoundException(Exception e) {
-        return new SimpleErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND.value());
+    public ResponseEntity<SimpleResponseRest> handleNotFoundException(Exception e) {
+        return new ResponseEntity<>(new SimpleResponseRest(e.getMessage(), HttpStatus.NOT_FOUND.value()),HttpStatus.NOT_FOUND);
     }
 
 }
