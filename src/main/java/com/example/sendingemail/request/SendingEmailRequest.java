@@ -3,6 +3,7 @@ package com.example.sendingemail.request;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -18,6 +19,7 @@ public class SendingEmailRequest {
 
     @NotNull(message = "Body required.")
     @NotEmpty(message = "Body required.")
+    @Size(min = 3,message = "Invalid body.")
     private String body;
 
 
